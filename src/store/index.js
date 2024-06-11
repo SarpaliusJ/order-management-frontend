@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import orders from "./Order";
+import AxiosService from "@/services/AxiosService";
 
 export default createStore({
   state: {
@@ -17,7 +18,15 @@ export default createStore({
     },
   },
   actions: {
-    logout({ commit }) {
+    async login({ commit }, payload) {
+      const response = await AxiosService.post("/login", {
+        email: payload.email,
+        password: payload.password,
+      });
+      commit("setAuthentication", response.data);
+    },
+    async logout({ commit }) {
+      await AxiosService.post("/logout");
       commit("setAuthentication", { isAuthenticated: false, token: null });
     },
   },

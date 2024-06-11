@@ -22,7 +22,6 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import AxiosService from "@/services/AxiosService";
 
 export default {
   name: "LoginComponent",
@@ -35,11 +34,11 @@ export default {
 
     const loginUser = async () => {
       try {
-        const response = await AxiosService.post("/login", {
+        const payload = {
           email: email.value,
           password: password.value,
-        });
-        store.commit("setAuthentication", response.data);
+        };
+        await store.dispatch("login", payload);
         await router.push("/");
       } catch (err) {
         error.value = err.response.data.message;
